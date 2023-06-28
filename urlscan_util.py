@@ -5,7 +5,7 @@ import os
 import urllib.parse
 
 """
-usage: urlscan_util.py [-h] [--csv CSV] [--task_domains] [--page_domains] [--urls] [--malicious] [--api_key API_KEY] filename
+usage: urlscan_util.py [-h] [--csv CSV] [--task_domains] [--page_domains] [--urls] [--malicious] [--api_key API_KEY] [--size SIZE] filename
 
 Submits newline-delimited queries in TXT file to URLScan API. Checks for key in URLSCAN_API_KEY environment variable by default
 
@@ -21,6 +21,7 @@ optional arguments:
   --malicious, -m       return only malicious results
   --api_key API_KEY, -a API_KEY
                         URLScan API key (override environment variable check)
+  --size SIZE, -s SIZE  Number of results returned, max 10 000, default 100
 """
 
 def get_urlscan_api_key():
