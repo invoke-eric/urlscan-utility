@@ -36,7 +36,7 @@ def create_querylist(filename):
     return(querylist)
 
 
-def create_dataframe(querylist, api_key):
+def create_dataframe(querylist, api_key, size):
     df_list = []
 
     request_headers = {
@@ -46,8 +46,10 @@ def create_dataframe(querylist, api_key):
     for q in querylist:
         try:
             query = urllib.parse.quote(q, safe='')
+            
 
-            url = "https://www.urlscan.io/api/v1/search?q=" + query
+            url = "https://www.urlscan.io/api/v1/search?q=" + query + "&size=" + str(size)
+            
             r = requests.get(url, headers=request_headers)
             data = r.json()
 
@@ -89,18 +91,21 @@ def main():
     parser.add_argument("--urls", "-u", action="store_true", default=False, help="print page urls")
     parser.add_argument("--malicious", "-m", action="store_true", default=False, help="return only malicious results")
     parser.add_argument("--api_key", "-a", action="store", help="URLScan API key (override environment variable check)")
+    parser.add_argument("--size", "-s", action="store", help="Number of results returned, max 10 000, default 100", default="100")
     args = parser.parse_args()
    
     if (args.api_key):
         api_key = args.api_key
     else:
         api_key = get_urlscan_api_key()
-    
+        
+    size = args.size
+
     filename = args.filename
     
     querylist = create_querylist(filename)
 
-    df = create_dataframe(querylist, api_key)
+    df = create_dataframe(querylist, api_key, size)
 
     if(args.malicious):
         df = filter_malicious(df)
